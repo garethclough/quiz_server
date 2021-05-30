@@ -1,0 +1,4 @@
+<?php
+	define('PROJECT_ROOT',__DIR__);
+	define('DIR_UPLOADS',PROJECT_ROOT.DIRECTORY_SEPARATOR.'uploads');
+	define('DIR_FLAGS',DIR_UPLOADS.DIRECTORY_SEPARATOR.'flags');
