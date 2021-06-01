@@ -2,16 +2,16 @@
     use Psr\Http\Message\ResponseInterface as Response;
     use Psr\Http\Message\ServerRequestInterface as Request;
     use Slim\Factory\AppFactory;
+    use Lib\Database;    
 
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
 
-    require '../vendor/autoload.php';
-    
+    require '../include.php';
     $settings = include('../settings/settings.php');
     $app = AppFactory::create();
-
+ 
     $app->addRoutingMiddleware();
 
     $errorMiddleware = $app->addErrorMiddleware(true, true, true);    
@@ -44,6 +44,16 @@
         return $response->withHeader('Content-Type', 'application/json');        
     });
 
+    $app->get('/getFlags', function (Request $request, Response $response, $args) {
+        $db = Database::get();
+        $s = $db->query('SELECT * FROM flag WHERE country_name IS NOT NULL');
+        $flags = [];
+        while($row = $s->fetchObject()) {
+            $flags[] = $row;
+        }
+        $response->getBody()->write(json_encode($flags));
+        return $response->withHeader('Content-Type', 'application/json');        
+    });
 
     // Run app
     $app->run();    
