@@ -62,7 +62,7 @@
             $svg = file_get_contents($file);
             $response = $response
                 ->withHeader('Content-Type','image/svg+xml')
-                ->withBody($svg);
+                ->getBody()->write($svg);
         }
         return $response;        
     });    
