@@ -60,11 +60,9 @@
         $file = DIR_FLAGS.DIRECTORY_SEPARATOR.$id.'.svg';
         if (file_exists($file)) {
             $svg = file_get_contents($file);
-            $response = $response
-                ->withHeader('Content-Type','image/svg+xml')
-                ->getBody()->write($svg);
+            $response->getBody()->write($svg);
         }
-        return $response;        
+        return $response->withHeader('Content-Type','image/svg+xml');        
     });    
 
     // Run app
