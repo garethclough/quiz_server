@@ -55,5 +55,17 @@
         return $response->withHeader('Content-Type', 'application/json');        
     });
 
+    $app->get('/flag/{id}.svg', function (Request $request, Response $response, $args) {
+        $id = (int)$args['id'];
+        $file = DIR_FLAGS.DIRECTORY_SEPARATOR.$id.'.svg';
+        if (file_exists($file)) {
+            $svg = file_get_contents($file);
+            $response = $response
+                ->withHeader('Content-Type','image/svg+xml')
+                ->withBody($svg);
+        }
+        return $response;        
+    });    
+
     // Run app
     $app->run();    
