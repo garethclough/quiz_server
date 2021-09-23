@@ -46,12 +46,17 @@
 
     $app->get('/getFlags', function (Request $request, Response $response, $args) {
         $db = Database::get();
+        $s = $db->query('SELECT * FROM quiz WHERE quiz_id = 1');
+        $quiz = $s->fetchObject();
         $s = $db->query('SELECT * FROM flag WHERE country_name IS NOT NULL');
         $flags = [];
         while($row = $s->fetchObject()) {
             $flags[] = $row;
         }
-        $response->getBody()->write(json_encode($flags));
+        $json = new \StdClass();
+        $json->quiz = $quiz;
+        $json->flags = $flags;
+        $response->getBody()->write(json_encode($json));
         return $response->withHeader('Content-Type', 'application/json');        
     });
 
@@ -62,7 +67,7 @@
             $svg = file_get_contents($file);
             $response->getBody()->write($svg);
         }
-        return $response->withHeader('Content-Type','image/svg+xml');        
+        return $response->withHeader('Content-Type','image/svg+xml');
     });    
 
     // Run app
